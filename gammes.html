@@ -1,0 +1,184 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="js/jquery-1.11.0.min.js" type="text/javascript"></script>
+<script src="js/jquery-ui.min.js" type="text/javascript"></script>
+<script src="js/main.js" type="text/javascript"></script>
+<script src="js/midi.js" type="text/javascript"></script>
+<script src="js/timbre.js" type="text/javascript"></script>
+<script src="js/keyboard.js" type="text/javascript"></script>
+<script src="js/mypianosounds.js" type="text/javascript"></script>
+<script src="js/guisounds.js" type="text/javascript"></script>
+<script src="js/frequency.js" type="text/javascript"></script>
+<script src="js/guiscales.js" type="text/javascript"></script>
+<script src="js/guimidiinput.js" type="text/javascript"></script>
+<script src="js/guihelp.js" type="text/javascript"></script>
+<script src="js/pythagorekeyboard.js" type="text/javascript"></script>
+<script src="js/jasmid/midifile.js" type="text/javascript"></script>
+<script src="js/jasmid/replayer.js" type="text/javascript"></script>
+<script src="js/jasmid/stream.js" type="text/javascript"></script>
+<script src="js/jasmid/mysynth.js" type="text/javascript"></script>
+<script src="js/jasmid/audio.js" type="text/javascript"></script>
+<script src="js/playmusic.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" href="css/jquery-ui.min.css" />
+</head>
+<body>
+
+
+<center>
+<h1>Exemples de gammes musicales<img id="helpbutton" src="help.png"/></h1>
+
+
+
+
+
+    <div class="wrapper">
+        <div class="left">
+            <select title="Choisir la gamme" name="scale" id="scale">
+                <option value="pythagore" selected id="pythagore">Gamme de Pythagore</option>
+                <option value="mesotonic" id="mesotonic">Tempérament mésotonique</option>
+                <option value="natural" id="natural">Gamme naturelle</option>
+                <option value="well-tempered" id="well-tempered">Tempérament égal</option>
+                <option value="quartertones" id="quartertones">Gamme à quart de tons</option>
+                <option value="bohlen-pierce" id="bohlen-pierce">Gamme de Bohlen-Pierce</option>
+            </select>
+        </div>
+        <div class="right">
+            <select style="vertical-align:top" title="Choisir l'instrument entendu" name="sound" id="sound">
+                <option  value="piano" selected id="piano">Piano</option>
+                <option  value="clarinet" id="clarinet">Clarinette</option>
+            </select>
+            <button class="play" title="Ecouter Rachmaninov" onclick="play('rachmaninov3.mid');">
+               <img height=32px src="rachmaninov.jpg"/>
+            </button>
+<button class="play" title="Ecouter Chopin" onclick="play('minute_waltz.mid');">
+               <img height=32px src="chopin.jpg"/>
+            </button>
+<button class="stop" hidden title="Stop" onclick="stop();">
+               <img height=16px src="stop.png"/>
+            </button>
+            <button style="vertical-align:top" title="Obtenir des informations sur l'entrée MIDI (synthétiseur branché, etc.)" id="midiinputbutton">
+                Information <br/>entrée MIDI
+            </button>
+        </div>
+    </div>
+
+
+    <br/><br/><br/>
+
+
+
+<canvas id="keyboard" width=1350px height=128px></canvas>
+</br></br>
+
+<div id="container">
+    <div id="panelbohlen-pierce">
+        <img style="vertical-align:top" height=380px src="bohlenpierce.png"/>
+        <button onmousedown="ecouterTritaveDown()" onmouseup="ecouterTritaveUp()">Ecouter une tritave (do-..sol)</br>Mais en Bohlen-Pierce, elle s'appelle do-do !</button>
+    </div>
+
+        <div id="panelpythagore">
+        <table><tr>
+            <td>
+            <img height=80px src="pythagore_start.png"/>
+            <div style="display: inline-block">
+            <canvas style="vertical-align:middle" id="pythagoreKeyboard" width=320px height=300px></canvas>
+            <img height=100px src="pythagore_quintejuste.png"/></div>
+
+
+
+            </td>
+            <td>
+                <button onmousedown="pythagoreAnimation()">Montre la construction !</button></br>
+                <button onmousedown="ecouterquintenormaleDown()" onmouseup="ecouterquintenormaleUp()">Ecouter une quinte juste <span style="color:green">do</span>-<span style="color:green">sol</span></button>
+            </td>
+            </tr><tr><td></br>
+                <button  onmousedown="ecouterquinteloupDown()" onmouseup="ecouterquinteloupUp()" placeholder="Attention ! Ce n'est pas une quinte. C'est pourquoi c'est moche. L'intervalle sol#-mib s'appelle la quinte du loup.">Ecouter l'intervalle <span style="color:red">sol#</span>-<span style="color:blue">mib</span></br> (quinte du loup)</button></td></tr></table>
+        </div>
+
+
+
+        <div id="panelmesotonic">
+        <table><tr>
+            <td>
+            <img height=80px src="pythagore_start.png"/>
+            <div style="display: inline-block">
+            <canvas style="vertical-align:middle" id="mesotonicKeyboard" width=320px height=300px></canvas>
+            <img height=100px src="mesotonic_quinte.png"/></div>
+
+
+
+            </td>
+            <td>
+                <button onmousedown="pythagoreAnimation()">Montre la construction !</button></br>
+                <button onmousedown="ecouterquintenormaleDown()" onmouseup="ecouterquintenormaleUp()">Ecouter une quinte légèrement diminué d'un quart de comma <span style="color:green">do</span>-<span style="color:green">sol</span></button>
+            </td>
+            </tr><tr><td></br>
+                <button  onmousedown="ecouterquinteloupDown()" onmouseup="ecouterquinteloupUp()" placeholder="L'intervalle sol#-mib s'appelle une quinte du loup.">Ecouter l'intervalle <span style="color:red">sol#</span>-<span style="color:blue">mib</span></br> (quinte du loup)</button></td></tr></table>
+        </div>
+
+
+        <div id="panelnatural">
+              <button  onmousedown="ecouterquinteloupReLaDown()" onmouseup="ecouterquinteloupReLaUp()">Ecouter l'intervalle ré-la</br> (quinte du loup)</button>
+           <img style="vertical-align:middle" height=380px src="naturel.png"/>
+
+        </div>
+
+
+
+
+
+        <div id="panelwell-tempered">
+
+            <img height=400px src="temperament_egal.png"/>
+        </div>
+        <div id="panelquartertones">
+        <img style="vertical-align:middle" height=380px src="quartdeton.png"/>
+        </div>
+
+</div>
+
+
+</center>
+
+
+
+	<div id="midiinputdialog" title="Information de l'entrée MIDI (synthétiseur branché, etc.)">
+	    <div>Attention : l'entrée MIDI ne fonctionne que sous Chrome. Branchez d'abord votre matériel puis relancez Chrome, puis aller sur ce site.</div>
+		<div id="key_data"></div>
+		<div id="inputs"></div>
+		<div id="outputs"></div>
+	</div>
+
+
+
+
+
+
+
+
+	<div id="helpdialog" title="Aide">
+        Ce site permet de jouer dans plusieurs gammes musicales. Vous pouvez choisir une gamme. Vous pouvez aussi choisir l'instrument que vous écoutez. La clarinette est intéressante car son son ne contient que des harmoniques impaires (intéressant pour la gamme de Bohlen-Pierce).
+         </br>
+        </br>
+        Pour entendre un son, 1) cliquer sur le clavier 2) ou appuyer sur le clavier de votre ordinateur (lettres en gras indiquées sur le clavier) 3) ou alors brancher un clavier MIDI (sous Google Chrome, d'abord brancher le clavier puis recharger Chrome puis la page)
+         </br>
+        </br>
+        Pour plus d'informations ou pour donner des commentaires, n'hésitez pas à me joindre à l'email prénom.nom@ens-rennes.fr.
+
+
+        </br>
+        </br>
+        François Schwarzentruber
+	</div>
+
+
+
+
+
+
+
+
+</body>
+</html>

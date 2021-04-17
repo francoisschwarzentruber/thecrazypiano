@@ -1,0 +1,27 @@
+* {
+	margin: 0;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+h1 {
+	margin: 1em 0;
+	text-align: center;
+}
+
+
+
+td {
+	vertical-align: top;
+	padding: 16px;
+}
+
+.wrapper{position:relative;}
+.right,.left{width:50%; position:absolute;}
+.right{right:0;}
+.left{left:0;}
+
+
+.noteAnimation {
+	position: absolute;
+}
